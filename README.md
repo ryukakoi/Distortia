@@ -1,0 +1,2 @@
+# Distortia
+Wiper malware
