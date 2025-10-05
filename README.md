@@ -10,7 +10,7 @@
 
 ### 🔥 Features  
 - **Screen glitching** (rapid color inversion)  
-- **Input blocking** (disables keyboard/mouse)   
+- **Input blocking** (disables keyboard/mouse)    
 - **Full disk wiping** (deletes files on all drives)   
 - **MBR overwrite** (corrupts boot sector)  
 - **Visual noise** (floating shapes overlay)  
